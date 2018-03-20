@@ -69,16 +69,20 @@ class galera::status {
     content => template('galera/clustercheck.erb'),
     owner   => 'clustercheck',
     group   => 'clustercheck',
-    mode    => '0500',
+    mode    => '0555',
     before  => Anchor['mysql::server::end'],
   }
 
   xinetd::service { 'mysqlchk':
     server                  => '/usr/local/bin/clustercheck',
     port                    => $port,
-    user                    => 'clustercheck',
+    user                    => 'nobody',
+    group                   => 'nobody',
     flags                   => 'REUSE',
     service_type            => 'UNLISTED',
+    cps                     => '3000 10',
+    instances               => '3000',
+    log_type                => 'SYSLOG daemon info',
     log_on_success          => $status_log_on_success,
     log_on_success_operator => $status_log_on_success_operator,
     log_on_failure          => $status_log_on_failure,
