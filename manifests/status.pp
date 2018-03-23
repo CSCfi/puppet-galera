@@ -73,6 +73,7 @@ class galera::status {
     before  => Anchor['mysql::server::end'],
   }
 
+
   xinetd::service { 'mysqlchk':
     server                  => '/usr/local/bin/clustercheck',
     port                    => $port,
