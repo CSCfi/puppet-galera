@@ -7,11 +7,6 @@ rvm:
   # Ruby version in CentOS7
   - 2.0.0-p648
 env:
-  # New versions
-  - PUPPET_VERSION="~> 2.7.0" STRICT_VARIABLES=no
-  - PUPPET_VERSION="~> 3.2.0" STRICT_VARIABLES=no
-  - PUPPET_VERSION="~> 3.4.0" STRICT_VARIABLES=no
-  # Pre set versions
   - PUPPET_VERSION="3.8.7"
   - PUPPET_VERSION="4.10.9"
   - PUPPET_VERSION="5.3.3"
