@@ -26,9 +26,7 @@ class galera::params {
     }
     elsif $galera::vendor_type == 'mariadb' {
       $mysql_service_name = 'mysql'
-      # HACK CCCP-3224
-      #$mysql_package_name_internal = 'MariaDB-Galera-server'
-      $mysql_package_name_internal = 'MariaDB-server'
+      $mysql_package_name_internal = 'MariaDB-Galera-server'
       $galera_package_name_internal = 'galera'
       $client_package_name_internal = 'MariaDB-client'
       $libgalera_location = '/usr/lib64/galera/libgalera_smm.so'
