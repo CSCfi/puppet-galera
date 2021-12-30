@@ -50,6 +50,14 @@
 #   recommended solution when using Percona XtraDB on platforms such as
 #   Ubuntu trusty which provide rsync 3.10
 #
+# [*wsrep_gcache_size*]
+#   (optional) Set the size of the GCache. Basically, having too small GCache
+#   size will lead to SST (Snapshot State Transfer) instead of 
+#   IST (Incremental State Transfer), thus we can avoid the SST by setting the
+#   GCache to the appropriate value.
+#   https://www.fromdual.com/gcache_size_in_galera_cluster
+#   Defaults to 2G
+#
 # [*root_password*]
 #   (optional) The mysql root password.
 #   Defaults to 'test'
@@ -99,6 +107,18 @@
 #   (Optional) Ensure state for package.
 #   Defaults to 'installed'
 #
+# [*innodb_lock_schedule_algorithm*]
+#   https://mariadb.com/docs/reference/mdb/system-variables/innodb_lock_schedule_algorithm/
+#   Defaults to 'FCFS'
+#
+# [*innodb_force_recovery*]
+#   https://dev.mysql.com/doc/refman/8.0/en/forcing-innodb-recovery.html
+#   Defaults to '0'
+#
+# [*innodb_fast_shutdown*]
+#   Speeds up the shutdown process of the InnoDB storage engine. Possible values are 0, 1 (faster) or 2 (fastest - crash-like).
+#   https://mariadb.com/docs/reference/mdb/system-variables/innodb_fast_shutdown/
+#   Defaults to '0'
 class galera(
   $galera_servers                   = [$::ipaddress_eth1],
   $galera_master                    = $::fqdn,
@@ -109,6 +129,7 @@ class galera(
   $wsrep_state_transfer_port        = 4444,
   $wsrep_inc_state_transfer_port    = 4568,
   $wsrep_sst_method                 = 'rsync',
+  $wsrep_gcache_size                = '2G',
   $root_password                    = 'test',
   $override_options                 = {},
   $vendor_type                      = 'percona',
@@ -122,6 +143,9 @@ class galera(
   $galera_package_name              = undef,
   $client_package_name              = undef,
   $package_ensure                   = 'installed',
+  $innodb_lock_schedule_algorithm   = 'FCFS',
+  $innodb_force_recovery            = '0',
+  $innodb_fast_shutdown             = '0'
 )
 {
   if $configure_repo {
@@ -166,11 +190,11 @@ class galera(
   }
 
   class { 'mysql::server':
-    package_name        => $galera::params::mysql_package_name,
-    override_options    => $options,
-    root_password       => $root_password,
-    service_name        => $galera::params::mysql_service_name,
-    restart             => $mysql_restart,
+    package_name     => $galera::params::mysql_package_name,
+    override_options => $options,
+    root_password    => $root_password,
+    service_name     => $galera::params::mysql_service_name,
+    restart          => $mysql_restart,
   }
 
   file { $galera::params::rundir:
@@ -183,9 +207,9 @@ class galera(
 
   if $galera::params::additional_packages {
     package{ $galera::params::additional_packages:
-      ensure    => $package_ensure,
-      require   => Anchor['mysql::server::start'],
-      before    => Class['mysql::server::install']
+      ensure  => $package_ensure,
+      require => Anchor['mysql::server::start'],
+      before  => Class['mysql::server::install']
     }
   }
 

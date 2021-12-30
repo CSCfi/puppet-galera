@@ -105,7 +105,7 @@ describe 'galera' do
         :m_mysql_package_name  => 'MariaDB-Galera-server',
         :m_galera_package_name => 'galera',
         :m_client_package_name => 'MariaDB-client',
-        :m_libgalera_location  => '/usr/lib64/galera/libgalera_smm.so',
+        :m_libgalera_location  => '/usr/lib64/galera-4/libgalera_smm.so',
         :mysql_service_name    => 'mysql',
         :nc_package_name       => 'nc',
       }
@@ -113,4 +113,3 @@ describe 'galera' do
    it_configures 'galera'
    end
 end
-

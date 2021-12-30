@@ -26,10 +26,10 @@ class galera::params {
     }
     elsif $galera::vendor_type == 'mariadb' {
       $mysql_service_name = 'mysql'
-      $mysql_package_name_internal = 'MariaDB-Galera-server'
-      $galera_package_name_internal = 'galera'
+      $mysql_package_name_internal = 'MariaDB-server'
+      $galera_package_name_internal = 'galera-4'
       $client_package_name_internal = 'MariaDB-client'
-      $libgalera_location = '/usr/lib64/galera/libgalera_smm.so'
+      $libgalera_location = '/usr/lib64/galera-4/libgalera_smm.so'
       $additional_packages = 'rsync'
     }
     elsif $galera::vendor_type == 'osp5' {
@@ -100,12 +100,15 @@ class galera::params {
         'wsrep_sst_auth'                    => "\"${wsrep_sst_auth}\"",
         'binlog_format'                     => 'ROW',
         'default_storage_engine'            => 'InnoDB',
-        'innodb_locks_unsafe_for_binlog'    => '1',
         'innodb_autoinc_lock_mode'          => '2',
+        'innodb_fast_shutdown'              => $galera::innodb_fast_shutdown,
+        'innodb_force_recovery'             => $galera::innodb_force_recovery,
+        'innodb_lock_schedule_algorithm'    => $galera::innodb_lock_schedule_algorithm,
         'query_cache_size'                  => '0',
         'query_cache_type'                  => '0',
         'wsrep_node_incoming_address'       => $galera::local_ip,
-        'wsrep_sst_receive_address'         => $galera::local_ip
+        'wsrep_sst_receive_address'         => $galera::local_ip,
+        'wsrep_provider_options'            => "gcache.size=${galera::wsrep_gcache_size}",
     }
   }
 
