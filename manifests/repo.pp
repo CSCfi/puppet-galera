@@ -16,7 +16,7 @@ class galera::repo(
   $apt_percona_repo_include_src = false,
 
   # Ubuntu/mariadb
-  $apt_mariadb_repo_location = 'http://mirror.aarnet.edu.au/pub/MariaDB/repo/5.5/ubuntu',
+  $apt_mariadb_repo_location = 'http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.2/ubuntu',
   $apt_mariadb_repo_release = $::lsbdistcodename,
   $apt_mariadb_repo_repos = 'main',
   $apt_mariadb_repo_key = '1BB943DB',
@@ -41,7 +41,7 @@ class galera::repo(
 
   if ! $yum_mariadb_baseurl {
     $lower = downcase($::operatingsystem)
-    $real_yum_mariadb_baseurl = "http://archive.mariadb.org/mariadb-5.5.65/yum/${lower}${::operatingsystemmajrelease}-amd64/"
+    $real_yum_mariadb_baseurl = "http://archive.mariadb.org/mariadb-10.2/yum/${lower}${::operatingsystemmajrelease}-amd64/"
   } else {
     $real_yum_mariadb_baseurl = $yum_mariadb_baseurl
   }

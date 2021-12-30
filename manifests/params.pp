@@ -54,9 +54,9 @@ class galera::params {
       $libgalera_location = '/usr/lib/libgalera_smm.so'
     }
     elsif $galera::vendor_type == 'mariadb' {
-      $mysql_package_name_internal = 'mariadb-galera-server-5.5'
+      $mysql_package_name_internal = 'mariadb-galera-server-10.2.39-1'
       $galera_package_name_internal = 'galera'
-      $client_package_name_internal = 'mariadb-client-5.5'
+      $client_package_name_internal = 'mariadb-client-10.2.39-1'
       $additional_packages = 'rsync'
       $libgalera_location = '/usr/lib/galera/libgalera_smm.so'
     }
