@@ -166,11 +166,11 @@ class galera(
   }
 
   class { 'mysql::server':
-    package_name        => $galera::params::mysql_package_name,
-    override_options    => $options,
-    root_password       => $root_password,
-    service_name        => $galera::params::mysql_service_name,
-    restart             => $mysql_restart,
+    package_name     => $galera::params::mysql_package_name,
+    override_options => $options,
+    root_password    => $root_password,
+    service_name     => $galera::params::mysql_service_name,
+    restart          => $mysql_restart,
   }
 
   file { $galera::params::rundir:
@@ -183,9 +183,9 @@ class galera(
 
   if $galera::params::additional_packages {
     package{ $galera::params::additional_packages:
-      ensure    => $package_ensure,
-      require   => Anchor['mysql::server::start'],
-      before    => Class['mysql::server::install']
+      ensure  => $package_ensure,
+      require => Anchor['mysql::server::start'],
+      before  => Class['mysql::server::install']
     }
   }
 
