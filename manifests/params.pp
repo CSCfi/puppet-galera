@@ -26,7 +26,7 @@ class galera::params {
     }
     elsif $galera::vendor_type == 'mariadb' {
       $mysql_service_name = 'mysql'
-      $mysql_package_name_internal = 'MariaDB-Galera-server'
+      $mysql_package_name_internal = 'MariaDB-server'
       $galera_package_name_internal = 'galera'
       $client_package_name_internal = 'MariaDB-client'
       $libgalera_location = '/usr/lib64/galera/libgalera_smm.so'
@@ -54,7 +54,7 @@ class galera::params {
       $libgalera_location = '/usr/lib/libgalera_smm.so'
     }
     elsif $galera::vendor_type == 'mariadb' {
-      $mysql_package_name_internal = 'mariadb-galera-server-10.2.39-1'
+      $mysql_package_name_internal = 'MariaDB-server-10.2.39-1'
       $galera_package_name_internal = 'galera'
       $client_package_name_internal = 'mariadb-client-10.2.39-1'
       $additional_packages = 'rsync'
