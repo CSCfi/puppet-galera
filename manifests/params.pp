@@ -8,7 +8,7 @@ class galera::params {
   if $galera::vendor_type == 'percona' {
     $bootstrap_command = '/etc/init.d/mysql bootstrap-pxc'
   } elsif $galera::vendor_type == 'mariadb' {
-    $bootstrap_command = '/etc/init.d/mysql bootstrap'
+    $bootstrap_command = '/usr/bin/galera_new_cluster'
   } elsif $galera::vendor_type == 'osp5' {
     # mysqld log part is a workaround for a packaging bug
     # to be removed when packages are fixed
@@ -31,6 +31,10 @@ class galera::params {
       $client_package_name_internal = 'MariaDB-client'
       $libgalera_location = '/usr/lib64/galera-4/libgalera_smm.so'
       $additional_packages = 'rsync'
+      # /usr/lib/systemd/system/mariadb.service:
+      # LimitNOFILE=32768 to 40000?
+      # LimitMEMLOCK=40000?
+      # daemon-reload
     }
     elsif $galera::vendor_type == 'osp5' {
       $mysql_service_name           = 'mariadb'
