@@ -31,10 +31,6 @@ class galera::params {
       $client_package_name_internal = 'MariaDB-client'
       $libgalera_location = '/usr/lib64/galera-4/libgalera_smm.so'
       $additional_packages = 'rsync'
-      # /usr/lib/systemd/system/mariadb.service:
-      # LimitNOFILE=32768 to 40000?
-      # LimitMEMLOCK=40000?
-      # daemon-reload
     }
     elsif $galera::vendor_type == 'osp5' {
       $mysql_service_name           = 'mariadb'
