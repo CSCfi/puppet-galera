@@ -122,6 +122,7 @@ class galera(
   $galera_package_name              = undef,
   $client_package_name              = undef,
   $package_ensure                   = 'installed',
+  $mariadb_max_open_files           = 0,
 )
 {
   if $configure_repo {
@@ -147,6 +148,8 @@ class galera(
   }
 
   include galera::params
+
+  include galera::performance
 
   $options = mysql_deepmerge($galera::params::default_options, $override_options)
 
