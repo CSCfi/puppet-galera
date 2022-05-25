@@ -122,7 +122,7 @@ class galera(
   $galera_package_name              = undef,
   $client_package_name              = undef,
   $package_ensure                   = 'installed',
-  $mariadb_max_open_files           = 0,
+  $mariadb_max_open_files           = 'infinity',
 )
 {
   if $configure_repo {
