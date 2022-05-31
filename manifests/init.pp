@@ -202,9 +202,8 @@ class galera(
       ] :
     ensure  => $package_ensure,
     require => Anchor['mysql::server::start'],
-    before  => Class['mysql::server::install']
+    before  => Class['mysql::server::install'],
   }
-
 
   if $::fqdn == $galera_master {
     # If there are no other servers up and we are the master, the cluster
