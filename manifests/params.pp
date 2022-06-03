@@ -25,7 +25,7 @@ class galera::params {
       $libgalera_location = '/usr/lib64/libgalera_smm.so'
     }
     elsif $galera::vendor_type == 'mariadb' {
-      $mysql_service_name = 'mysql'
+      $mysql_service_name = 'mariadb'
       $mysql_package_name_internal = 'MariaDB-server'
       $galera_package_name_internal = 'galera-4'
       $client_package_name_internal = 'MariaDB-client'
