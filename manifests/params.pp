@@ -30,7 +30,7 @@ class galera::params {
       $galera_package_name_internal = 'galera-4'
       $client_package_name_internal = 'MariaDB-client'
       $libgalera_location = '/usr/lib64/galera-4/libgalera_smm.so'
-      $additional_packages = 'rsync'
+      $additional_packages = [ 'MariaDB-backup', 'rsync' ]
     }
     elsif $galera::vendor_type == 'osp5' {
       $mysql_service_name           = 'mariadb'
@@ -44,7 +44,7 @@ class galera::params {
     $rundir            = '/var/run/mysqld'
     $nmap_package_name = 'nmap'
   }
-  elsif ($::osfamily == 'Debian'){
+  elsif ($::osfamily == 'Debian') {
     $mysql_service_name = 'mysql'
     if $galera::vendor_type == 'percona' {
       $mysql_package_name_internal = 'percona-xtradb-cluster-server-5.5'
@@ -73,14 +73,15 @@ class galera::params {
 
   # add auth credentials for SST methods which need them:
   #  mysqldump, xtrabackup, and xtrabackup-v2
-  if ($galera::wsrep_sst_method in [ 'skip', 'rsync' ]) {
+  if ($galera::wsrep_sst_method in ['skip', 'rsync']) {
     $wsrep_sst_auth = undef
   }
-  elsif ($galera::wsrep_sst_method in
-    [ 'mysqldump',
-    'xtrabackup',
-    'xtrabackup-v2' ])
-  {
+  elsif ($galera::wsrep_sst_method in [
+      'mysqldump',
+      'xtrabackup',
+      'xtrabackup-v2',
+      'mariabackup',
+  ]) {
     $wsrep_sst_auth = "root:${galera::root_password}"
   }
   else {
@@ -88,36 +89,35 @@ class galera::params {
     warning("wsrep_sst_method of ${galera::wsrep_sst_method} not recognized")
   }
 
-
-    $default_options = {
-      'mysqld' => {
-        'bind-address'                      => $galera::bind_address,
-        'wsrep_node_address'                => $galera::local_ip,
-        'wsrep_provider'                    => $galera::params::libgalera_location,
-        'wsrep_cluster_address'             => "gcomm://${server_csl}",
-        'wsrep_slave_threads'               => '8',
-        'wsrep_sst_method'                  => $galera::wsrep_sst_method,
-        'wsrep_sst_auth'                    => "\"${wsrep_sst_auth}\"",
-        'binlog_format'                     => 'ROW',
-        'default_storage_engine'            => 'InnoDB',
-        'innodb_autoinc_lock_mode'          => '2',
-        'query_cache_size'                  => '0',
-        'query_cache_type'                  => '0',
-        'wsrep_node_incoming_address'       => $galera::local_ip,
-        'wsrep_sst_receive_address'         => $galera::local_ip
+  $default_options = {
+    'mysqld' => {
+      'bind-address'                      => $galera::bind_address,
+      'wsrep_node_address'                => $galera::local_ip,
+      'wsrep_provider'                    => $galera::params::libgalera_location,
+      'wsrep_cluster_address'             => "gcomm://${server_csl}",
+      'wsrep_slave_threads'               => '8',
+      'wsrep_sst_method'                  => $galera::wsrep_sst_method,
+      'wsrep_sst_auth'                    => "\"${wsrep_sst_auth}\"",
+      'binlog_format'                     => 'ROW',
+      'default_storage_engine'            => 'InnoDB',
+      'innodb_autoinc_lock_mode'          => '2',
+      'query_cache_size'                  => '0',
+      'query_cache_type'                  => '0',
+      'wsrep_node_incoming_address'       => $galera::local_ip,
+      'wsrep_sst_receive_address'         => $galera::local_ip
     }
   }
 
   $mysql_package_name = pick(
-    $::galera::mysql_package_name,
+    $galera::mysql_package_name,
     $mysql_package_name_internal
   )
   $galera_package_name = pick(
-    $::galera::galera_package_name,
+    $galera::galera_package_name,
     $galera_package_name_internal
   )
   $client_package_name = pick(
-    $::galera::client_package_name,
+    $galera::client_package_name,
     $client_package_name_internal
   )
 }
