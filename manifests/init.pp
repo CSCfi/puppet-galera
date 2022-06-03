@@ -127,7 +127,7 @@ class galera(
 {
   if $configure_repo {
     include galera::repo
-    Class['::galera::repo'] -> Class['mysql::server']
+    Class['galera::repo'] -> Class['mysql::server']
   }
 
   if $configure_firewall {
@@ -162,7 +162,7 @@ class galera(
       onlyif  => [
         "/usr/bin/mysql --user=root --password=${root_password} -e 'select count(1);'",
         "/usr/bin/test `/bin/cat ${::root_home}/.my.cnf | /bin/grep -c \"password='${root_password}'\"` -eq 0",
-        ],
+      ],
       require => [Service['mysqld']],
       before  => [Class['mysql::server::root_password']],
     }
@@ -188,7 +188,7 @@ class galera(
     package{ $galera::params::additional_packages:
       ensure  => $package_ensure,
       require => Anchor['mysql::server::start'],
-      before  => Class['mysql::server::install']
+      before  => Class['mysql::server::install'],
     }
   }
 
@@ -196,13 +196,13 @@ class galera(
     name => $galera::params::client_package_name
   }
 
-  package{[
+  package{ [
       $galera::params::nmap_package_name,
       $galera::params::galera_package_name,
-      ] :
-    ensure  => $package_ensure,
-    require => Anchor['mysql::server::start'],
-    before  => Class['mysql::server::install'],
+    ]:
+      ensure  => $package_ensure,
+      require => Anchor['mysql::server::start'],
+      before  => Class['mysql::server::install'],
   }
 
   if $::fqdn == $galera_master {
