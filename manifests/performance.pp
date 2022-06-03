@@ -10,6 +10,7 @@ class galera::performance (
     recurse => true,
   }
   file { 'max-open-files.conf':
+    ensure => present,
     path   => '/etc/systemd/system/mariadb.service.d/max-open-files.conf',
   }
   file_line { 'service_section':
