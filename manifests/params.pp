@@ -59,6 +59,7 @@ class galera::params {
       $client_package_name_internal = 'mariadb-client-5.5'
       $additional_packages = 'rsync'
       $libgalera_location = '/usr/lib/galera/libgalera_smm.so'
+      $mysql_service_name = 'mariadb'
     }
     elsif $galera::vendor_type == 'osp5' {
       fail('OSP5 is only supported on RHEL platforms.')
